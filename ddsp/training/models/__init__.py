@@ -16,6 +16,7 @@
 """Module with all the global configurable models for training."""
 
 from ddsp.training.models.autoencoder import Autoencoder
+from ddsp.training.models.dag_model import DAGModel
 from ddsp.training.models.model import Model
 from ddsp.training.models.transcribing_autoencoder import TranscribingAutoencoder
 import gin
@@ -23,6 +24,7 @@ import gin
 _configurable = lambda cls: gin.configurable(cls, module=__name__)
 
 Autoencoder = _configurable(Autoencoder)
+DAGModel = _configurable(DAGModel)
 TranscribingAutoencoder = _configurable(TranscribingAutoencoder)
 
 

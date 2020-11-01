@@ -17,6 +17,7 @@
 
 # Module imports.
 from ddsp import core
+from ddsp import dag_ops
 from ddsp import effects
 from ddsp import losses
 from ddsp import processors
