@@ -3,3 +3,5 @@
 /pakages
 
 *.pyc
+.vscode/settings.json
+mine/test.py
