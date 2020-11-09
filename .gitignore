@@ -1,6 +1,8 @@
 /venv
 /examples
 /pakages
+/papers
+
 
 *.pyc
 .vscode/settings.json
