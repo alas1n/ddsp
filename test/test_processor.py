@@ -32,6 +32,13 @@ def playsound(inputsound):
     sd.stop()
 
 
+def Myspecplot(inputsound):
+    plot = plt.figure(figsize=(4, 4))
+    powerSpectrum, freqenciesFound, time, imageAxis = plt.specgram(inputsound[0], Fs=DEFAULT_SAMPLE_RATE)
+    plt.xlabel('Time')
+    plt.ylabel('Frequency')
+    return plot   
+
 # --------------------------------------------------------------------------------------------------------------------------------
 
 n_frames = 1000
@@ -128,8 +135,17 @@ plot_2.show()
 # --------------------------------------------------------------------------------------------------------------------------------
 audio = additive_synth.get_signal(**controls)
 playsound(audio)
+# specplot(audio)
 
 
+# plot_3 = plt.figure(figsize=(4, 4))
+# powerSpectrum, freqenciesFound, time, imageAxis = plt.specgram(audio[0], Fs=DEFAULT_SAMPLE_RATE)
+# plt.xlabel('Time')
+# plt.ylabel('Frequency')
+# plot_3.show()   
+
+plot_3 = Myspecplot(audio)
+plot_3.show()
 # --------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------
