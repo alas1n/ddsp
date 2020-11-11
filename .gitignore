@@ -8,3 +8,4 @@
 *.pyc
 .vscode/settings.json
 mine/test.py
+test/test.py
