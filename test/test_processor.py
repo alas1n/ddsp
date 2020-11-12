@@ -9,8 +9,8 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import ddsp
-import ddsp.training
-from ddsp.colab.colab_utils import play, specplot, DEFAULT_SAMPLE_RATE
+# import ddsp.training
+# from ddsp.colab.colab_utils import play, specplot, DEFAULT_SAMPLE_RATE
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
@@ -19,7 +19,7 @@ import tensorflow as tf
 import sounddevice as sd
 import time as stime
 
-
+DEFAULT_SAMPLE_RATE = 16000
 sample_rate = DEFAULT_SAMPLE_RATE  # 16000
 
 
@@ -135,19 +135,46 @@ plot_2.show()
 # --------------------------------------------------------------------------------------------------------------------------------
 audio = additive_synth.get_signal(**controls)
 playsound(audio)
-# specplot(audio)
-
-
-# plot_3 = plt.figure(figsize=(4, 4))
-# powerSpectrum, freqenciesFound, time, imageAxis = plt.specgram(audio[0], Fs=DEFAULT_SAMPLE_RATE)
-# plt.xlabel('Time')
-# plt.ylabel('Frequency')
-# plot_3.show()   
-
 plot_3 = Myspecplot(audio)
 plot_3.show()
+
 # --------------------------------------------------------------------------------------------------------------------------------
+audio = additive_synth(amps, harmonic_distribution, f0_hz)
+
+playsound(audio)
+plot_4 = Myspecplot(audio)
+plot_4.show()
+
 # --------------------------------------------------------------------------------------------------------------------------------
+## Some weird control envelopes...
+
+# Amplitude [batch, n_frames, 1].
+amps = np.ones([n_frames]) * -5.0
+amps[:50] +=  np.linspace(0, 7.0, 50)
+amps[50:200] += 7.0
+amps[200:900] += (7.0 - np.linspace(0.0, 7.0, 700))
+amps *= np.abs(np.cos(np.linspace(0, 2*np.pi * 10.0, n_frames)))
+amps = amps[np.newaxis, :, np.newaxis]
+
+# Harmonic Distribution [batch, n_frames, n_harmonics].
+n_harmonics = 20
+harmonic_distribution = np.ones([n_frames, 1]) * np.linspace(1.0, -1.0, n_harmonics)[np.newaxis, :]
+for i in range(n_harmonics):
+  harmonic_distribution[:, i] = 1.0 - np.linspace(i * 0.09, 2.0, 1000)
+  harmonic_distribution[:, i] *= 5.0 * np.abs(np.cos(np.linspace(0, 2*np.pi * 0.1 * i, n_frames)))
+  if i % 2 != 0:
+    harmonic_distribution[:, i] = -3
+harmonic_distribution = harmonic_distribution[np.newaxis, :, :]
+
+# Fundamental frequency in Hz [batch, n_frames, 1].
+f0_hz = np.ones([n_frames]) * 200.0
+f0_hz[:100] *= np.linspace(2, 1, 100)**2
+f0_hz[200:1000] += 20 * np.sin(np.linspace(0, 8.0, 800) * 2 * np.pi * np.linspace(0, 1.0, 800))  * np.linspace(0, 1.0, 800)
+f0_hz = f0_hz[np.newaxis, :, np.newaxis]
+
+# Get valid controls
+controls = additive_synth.get_controls(amps, harmonic_distribution, f0_hz)
+
 # --------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------------------------------
