@@ -12,3 +12,7 @@ test/test.py
 *-checkpoint.py
 *-checkpoint.ipynb
 test/Untitled.ipynb
+test/content/pretrained/ckpt-40000.index
+test/content/pretrained/ckpt-40000.data-00000-of-00001
+test/content/pretrained/dataset_statistics.pkl
+test/content/pretrained/operative_config-0.gin
