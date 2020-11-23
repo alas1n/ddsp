@@ -7,11 +7,9 @@ from flask_jwt import JWT, jwt_required
 
 
 app = Flask(__name__)
-# app.secret_key = 'kNjsvnoirDFHh9goimwD43itgnvqE#v8g8C!r@$#tge4fsfsfVst$#%$u*(tgJUsese6Lgsgsf'
 api = Api(app)
 
 
-# jwt = JWT(app, authenticate, identity)  # auth
 
 items = []
 
@@ -21,6 +19,7 @@ class Item(Resource):
     def get(self, name):
         item = next(filter(lambda x: x["name"] == name, items), None)
         return {'item': item}, 200 if item else 404
+        # return "test"
 
     def post(self, name):
         if next(filter(lambda x: x["name"] == name, items), None):
@@ -53,14 +52,25 @@ class Item(Resource):
 
 
 class Items(Resource):
-    def get(self):
-        if len(items) > 0:
-            return {"items": items}
-        return {'items': None}, 404
+    def get(self,name):
+        # if len(items) > 0:
+        #     return {"items": items}
+        return items
+        # for item in items:
+            # return item
+    def post(self,name):
+        if next(filter(lambda x: x["name"] == name, items), None):
+            return {'message': "An item with name '{}' already exist".format(name)}, 400
+        data = request.get_json()
+        item = {"name": name}
+        items.append(item)
+        # return item, 201
+        return item
+        # return "post test"
 
 
 api.add_resource(Item, '/item/<string:name>')
-api.add_resource(Items, '/items')
+api.add_resource(Items, '/items/<string:name>')
 # api.add_resource(UserRegister, '/register')
 
 
