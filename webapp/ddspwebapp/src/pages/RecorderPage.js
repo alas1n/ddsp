@@ -1,6 +1,7 @@
 import React from "react";
 // import "./App.css";
 import MicRecorder from "mic-recorder-to-mp3";
+import axios from "axios";
 
 // COMPONENTS
 import RecorderCmp from "./../components/RecorderCmp";
@@ -16,6 +17,14 @@ class RecorderPage extends React.Component {
       isBlocked: false,
     };
   }
+
+  postToServer = async () => {
+    await axios.post(`https://6fead85b4b54.ngrok.io/items`).then((res) => {
+      const persons = res.data;
+      // this.setState({ persons });
+      console.log(persons);
+    });
+  };
 
   stertRecording = (num) => {
     if (this.state.isBlocked) {
@@ -44,7 +53,14 @@ class RecorderPage extends React.Component {
     Mp3Recorder.stop()
       .getMp3()
       .then(([buffer, blob]) => {
-        const blobURLR = URL.createObjectURL(blob);
+        const blobURL = URL.createObjectURL(blob);
+        const blobObj = blob;
+        this.setState((prevState) => {
+          return {
+            ...prevState,
+            blobObj,
+          };
+        });
         this.setState((prevState, props) => {
           const isRecording = prevState.isRecording.map((item, indx) => {
             if (indx === num) {
@@ -58,15 +74,15 @@ class RecorderPage extends React.Component {
           };
         });
         this.setState((prevState, props) => {
-          const blobURL = prevState.blobURL.map((item, indx) => {
+          const ـblobURL = prevState.blobURL.map((item, indx) => {
             if (indx === num) {
-              return blobURLR;
+              return blobURL;
             } else {
               return item;
             }
           });
           return {
-            blobURL,
+            blobURL: ـblobURL,
           };
         });
       })
@@ -89,21 +105,6 @@ class RecorderPage extends React.Component {
   render() {
     return (
       <div className="App">
-        {/* <header className="App-header">
-          <button
-            onClick={() => this.stertRecording(0)}
-            disabled={this.state.isRecording[0]}
-          >
-            Record
-          </button>
-          <button
-            onClick={() => this.stopRecording(0)}
-            disabled={!this.state.isRecording[0]}
-          >
-            Stop
-          </button>
-          <audio src={this.state.blobURL[0]} controls="controls" />
-        </header> */}
         <RecorderCmp
           stertRecording={this.stertRecording}
           isRecording={this.state.isRecording[0]}
@@ -139,6 +140,22 @@ class RecorderPage extends React.Component {
           blobURL={this.state.blobURL[4]}
           num={4}
         />
+        <button
+          onClick={() => {
+            this.postToServer();
+            console.log("send");
+          }}
+        >
+          send
+        </button>
+        <button
+          onClick={() => {
+            console.log("record 1:", this.state.blobURL[0]);
+            console.log("blob_Obj:", this.state.blobObj);
+          }}
+        >
+          print
+        </button>
       </div>
     );
   }
