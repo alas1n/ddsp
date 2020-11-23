@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+// import "./App.css";
 import MicRecorder from "mic-recorder-to-mp3";
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
@@ -14,7 +14,7 @@ class RecorderPage extends React.Component {
     };
   }
 
-  start = () => {
+  stertRecording = () => {
     if (this.state.isBlocked) {
       console.log("Permission Denied");
     } else {
@@ -26,7 +26,7 @@ class RecorderPage extends React.Component {
     }
   };
 
-  stop = () => {
+  stopRecording = () => {
     Mp3Recorder.stop()
       .getMp3()
       .then(([buffer, blob]) => {
@@ -54,10 +54,16 @@ class RecorderPage extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <button onClick={this.start} disabled={this.state.isRecording}>
+          <button
+            onClick={this.stertRecording}
+            disabled={this.state.isRecording}
+          >
             Record
           </button>
-          <button onClick={this.stop} disabled={!this.state.isRecording}>
+          <button
+            onClick={this.stopRecording}
+            disabled={!this.state.isRecording}
+          >
             Stop
           </button>
           <audio src={this.state.blobURL} controls="controls" />
