@@ -37,17 +37,16 @@ class RecorderPage extends React.Component {
   };
 
   componentDidMount() {
-    navigator.getUserMedia(
-      { audio: true },
-      () => {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then(() => {
         console.log("Permission Granted");
         this.setState({ isBlocked: false });
-      },
-      () => {
+      })
+      .catch(() => {
         console.log("Permission Denied");
         this.setState({ isBlocked: true });
-      }
-    );
+      });
   }
 
   render() {
