@@ -18,12 +18,31 @@ class RecorderPage extends React.Component {
     };
   }
 
-  postToServer = async () => {
-    await axios.post(`https://6fead85b4b54.ngrok.io/items`).then((res) => {
-      const persons = res.data;
-      // this.setState({ persons });
-      console.log(persons);
-    });
+  // postToServer = async () => {
+  //   await axios
+  //     .post(`https://9c96ceeee5c7.ngrok.io/items/${this.state.blobObj}`)
+  //     .then((res) => {
+  //       const persons = res.data;
+  //       // this.setState({ persons });
+  //       console.log(persons);
+  //     });
+  // };
+  uploadAudio = async (audioBlob) => {
+    console.log(audioBlob);
+    let data = new FormData();
+    console.log(data);
+    data.append("file", audioBlob);
+    console.log(data);
+    return axios
+      .post(`https://9c96ceeee5c7.ngrok.io/audiorecog`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        return res;
+      });
   };
 
   stertRecording = (num) => {
@@ -55,6 +74,7 @@ class RecorderPage extends React.Component {
       .then(([buffer, blob]) => {
         const blobURL = URL.createObjectURL(blob);
         const blobObj = blob;
+        console.log(blob);
         this.setState((prevState) => {
           return {
             ...prevState,
@@ -142,7 +162,7 @@ class RecorderPage extends React.Component {
         />
         <button
           onClick={() => {
-            this.postToServer();
+            this.uploadAudio(this.state.blobObj);
             console.log("send");
           }}
         >

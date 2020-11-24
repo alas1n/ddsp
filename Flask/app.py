@@ -68,6 +68,21 @@ class Items(Resource):
         return item
         # return "post test"
 
+@app.route('/audiorecog', methods = ['GET', 'POST'])
+def audiorecog():
+   if request.method == 'POST':
+      print("Recieved Audio File")
+      ##
+    #   print("request")
+    #   print(request.files['file'])
+      file = request.files['file']
+      print('File from the POST request is: {}'.format(file))
+      with open("audio.wav", "wb") as aud:
+            aud_stream = file.read()
+            aud.write(aud_stream)
+      return "Success"
+   return 'Call from get' 
+
 
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(Items, '/items/<string:name>')
