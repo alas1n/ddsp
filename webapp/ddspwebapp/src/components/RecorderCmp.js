@@ -5,13 +5,13 @@ const RecorderCmp = (props) => {
   return (
     <div className="Recorder">
       <button
-        onClick={() => props.stertRecording(props.num)}
+        onClick={() => props.startRecording()}
         disabled={props.isRecording}
       >
         Record
       </button>
       <button
-        onClick={() => props.stopRecording(props.num)}
+        onClick={() => props.stopRecording()}
         disabled={!props.isRecording}
       >
         Stop
@@ -27,13 +27,13 @@ const RecorderCmp = (props) => {
       </button>
       <button
         onClick={async () => {
-          await props.downloadAudio(props.num);
           console.log("get Audio");
+          await props.downloadAudio(props.num);
         }}
       >
         getAudo
       </button>
-      <audio src={props.blobURL_received} controls="controls" />
+      <audio src={props.blobURL_received[props.num]} controls="controls" />
     </div>
   );
 };
