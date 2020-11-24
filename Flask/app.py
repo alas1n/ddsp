@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask_restful import Resource, Api, reqparse
 from flask_jwt import JWT, jwt_required
 
@@ -72,16 +72,15 @@ class Items(Resource):
 def audiorecog():
    if request.method == 'POST':
       print("Recieved Audio File")
-      ##
-    #   print("request")
-    #   print(request.files['file'])
       file = request.files['file']
       print('File from the POST request is: {}'.format(file))
       with open("audio.wav", "wb") as aud:
             aud_stream = file.read()
             aud.write(aud_stream)
       return "Success"
-   return 'Call from get' 
+   else:
+       return send_file('audio.wav', attachment_filename='audio.wav')
+
 
 
 api.add_resource(Item, '/item/<string:name>')
