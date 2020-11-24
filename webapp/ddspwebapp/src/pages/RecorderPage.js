@@ -6,7 +6,7 @@ import axios from "axios";
 import RecorderCmp from "./../components/RecorderCmp";
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
-const baseURL = "https://07da6b4b08b8.ngrok.io";
+const baseURL = "http://07da6b4b08b8.ngrok.io";
 
 class RecorderPage extends React.Component {
   constructor(props) {
@@ -70,7 +70,7 @@ class RecorderPage extends React.Component {
 
   downloadAudio = async (num) => {
     return axios
-      .get(`${baseURL}/audiorecorder/`, {
+      .get(`${baseURL}/audiorecorder/?asd=1`, {
         responseType: "blob",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -79,7 +79,7 @@ class RecorderPage extends React.Component {
       .then((res) => {
         const blob = new Blob([res.data], { type: "audio/mp3" });
         const blobURL = URL.createObjectURL(blob);
-        console.log("blobURL", blobURL);
+        // console.log("blobURL", blobURL);
         this.setState((prevState, props) => {
           const ـblobURL = prevState.blobURL_received.map((item, indx) => {
             if (indx === num) {

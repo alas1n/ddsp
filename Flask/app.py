@@ -78,6 +78,8 @@ class AudioRecorder(Resource):
                 aud.write(aud_stream)
         return "Success"
     def get(self):
+        print("param")
+        print("param",request.args('asd'))
         return send_file('audio.wav', attachment_filename='audio.wav')
 
 
