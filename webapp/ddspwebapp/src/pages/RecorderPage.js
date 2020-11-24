@@ -6,7 +6,7 @@ import axios from "axios";
 import RecorderCmp from "./../components/RecorderCmp";
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
-const baseURL = "http://07da6b4b08b8.ngrok.io";
+const baseURL = "http://127.0.0.1:5000";
 
 class RecorderPage extends React.Component {
   constructor(props) {
@@ -70,7 +70,7 @@ class RecorderPage extends React.Component {
 
   downloadAudio = async (num) => {
     return axios
-      .get(`${baseURL}/audiorecorder/?asd=1`, {
+      .get(`${baseURL}/audiorecorder/`, {
         responseType: "blob",
         headers: {
           "Content-Type": "multipart/form-data",
