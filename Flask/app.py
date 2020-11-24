@@ -9,86 +9,30 @@ from flask_jwt import JWT, jwt_required
 app = Flask(__name__)
 api = Api(app)
 
-
-
-items = []
-
-
-class Item(Resource):
-    @jwt_required()
-    def get(self, name):
-        item = next(filter(lambda x: x["name"] == name, items), None)
-        return {'item': item}, 200 if item else 404
-        # return "test"
-
-    def post(self, name):
-        if next(filter(lambda x: x["name"] == name, items), None):
-            return {'message': "An item with name '{}' already exist".format(name)}, 400
-        data = request.get_json()
-        item = {"name": name, "price": data['price']}
-        items.append(item)
-        return item, 201
-
-    # def delete(self, name):
-    #     global items
-    #     items = list(filter(lambda x: x['name'] != name, items))
-    #     return {"message": "item deleted"}
-
-    # def put(self, name):
-    #     # data = request.get_json()
-    #     parser = reqparse.RequestParser()
-    #     parser.add_argument('price',
-    #                         type=float,
-    #                         required=True,
-    #                         help="This field cannot be left balnk!")
-    #     data = parser.parse_args()
-    #     item = next(filter(lambda x: x["name"] == name, items), None)
-    #     if item is None:
-    #         item = {"name": name,  "price": data["price"]}
-    #         items.append(item)
-    #     else:
-    #         item.update(data)
-    #     return item
-
-
-class Items(Resource):
-    def get(self,name):
-        # if len(items) > 0:
-        #     return {"items": items}
-        return items
-        # for item in items:
-            # return item
-    def post(self,name):
-        if next(filter(lambda x: x["name"] == name, items), None):
-            return {'message': "An item with name '{}' already exist".format(name)}, 400
-        data = request.get_json()
-        item = {"name": name}
-        items.append(item)
-        # return item, 201
-        return item
-        # return "post test"
-
 class AudioRecorder(Resource):
     def post(self):
-        print("Recieved Audio File")
-        file = request.files['file']
-        print('File from the POST request is: {}'.format(file))
+        print("audio File received")
         with open("audio.wav", "wb") as aud:
-                aud_stream = file.read()
+                aud_stream = request.files['file'].read()
                 aud.write(aud_stream)
         return "Success"
     def get(self):
-        print("param")
-        print("param",request.args('asd'))
+        # print("request.data",request.args)
         return send_file('audio.wav', attachment_filename='audio.wav')
 
+# class AudioReciver(Resource):
+#     def get(self):
+#         print("request.data",request.args)
+#         return send_file('audio.wav', attachment_filename='audio.wav')
+
+# @app.route('/audioreciver/', methods=['GET',])
+# def audioreciver():
+#     print("request",request.args.get)
+#     return send_file('audio.wav', attachment_filename='audio.wav')
 
 
-
-# api.add_resource(Item, '/item/<string:name>')
-# api.add_resource(Items, '/items/<string:name>')
 api.add_resource(AudioRecorder, '/audiorecorder/')
-# api.add_resource(UserRegister, '/register')
+# api.add_resource(AudioReciver, '/audioreciver/')
 
 
 app.run(port=5000, debug=True)
