@@ -25,7 +25,7 @@ const RecorderCmp = (props) => {
       >
         send
       </button>
-      <button
+      {/* <button
         onClick={async () => {
           await props.downloadAudio(props.num);
           console.log("Audio downloaded");
@@ -33,7 +33,7 @@ const RecorderCmp = (props) => {
       >
         getAudo
       </button>
-      <audio src={props.blobURL_received[props.num]} controls="controls" />
+      <audio src={props.blobURL_received[props.num]} controls="controls" /> */}
     </div>
   );
 };

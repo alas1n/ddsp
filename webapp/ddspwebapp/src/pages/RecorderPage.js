@@ -68,9 +68,10 @@ class RecorderPage extends React.Component {
       });
   };
 
-  downloadAudio = async (num) => {
-    return axios
-      .get(`${baseURL}/audiorecorder/`, {
+  downloadAudio = async (num, model) => {
+    await axios
+      .get(`${baseURL}/timbretransfer/`, {
+        params: { model, num },
         responseType: "blob",
         headers: {
           "Content-Type": "multipart/form-data",
@@ -79,7 +80,7 @@ class RecorderPage extends React.Component {
       .then((res) => {
         const blob = new Blob([res.data], { type: "audio/mp3" });
         const blobURL = URL.createObjectURL(blob);
-        // console.log("blobURL", blobURL);
+        console.log("blobURL", blobURL);
         this.setState((prevState, props) => {
           const ـblobURL = prevState.blobURL_received.map((item, indx) => {
             if (indx === num) {
@@ -89,10 +90,11 @@ class RecorderPage extends React.Component {
             }
           });
           return {
+            ...prevState,
             blobURL_received: ـblobURL,
           };
         });
-        return res;
+        // return res;
       });
   };
 
@@ -119,10 +121,71 @@ class RecorderPage extends React.Component {
           blobURL={this.state.blobURL_recorded}
           num={0}
           uploadAudio={this.uploadAudio}
-          downloadAudio={this.downloadAudio}
           blob={this.state.blob}
-          blobURL_received={this.state.blobURL_received}
+          // downloadAudio={this.downloadAudio}
+          // blobURL_received={this.state.blobURL_received}
         />
+        <button
+          onClick={async () => {
+            await this.downloadAudio(0, "Violin");
+            console.log("Audio downloaded");
+          }}
+        >
+          Violin
+        </button>
+        {this.state.blobURL_received[0] ? (
+          <audio src={this.state.blobURL_received[0]} controls="controls" />
+        ) : undefined}
+        <button
+          onClick={async () => {
+            await this.downloadAudio(1, "Flute");
+            console.log("Audio downloaded");
+          }}
+        >
+          Flute
+        </button>
+        <audio src={this.state.blobURL_received[1]} controls="controls" />
+        <button
+          onClick={async () => {
+            await this.downloadAudio(2, "Flute2");
+            console.log("Audio downloaded");
+          }}
+        >
+          Flute2
+        </button>
+        <audio src={this.state.blobURL_received[2]} controls="controls" />
+        <button
+          onClick={async () => {
+            await this.downloadAudio(3, "Trumpet");
+            console.log("Audio downloaded");
+          }}
+        >
+          Trumpet
+        </button>
+        <audio src={this.state.blobURL_received[3]} controls="controls" />
+        <button
+          onClick={async () => {
+            await this.downloadAudio(4, "Tenor_Saxophone");
+            console.log("Audio downloaded");
+          }}
+        >
+          Tenor_Saxophone
+        </button>
+        <audio src={this.state.blobURL_received[4]} controls="controls" />
+        <button
+          onClick={() => {
+            console.log(this.state);
+            this.setState((prevState) => {
+              return {
+                ...prevState,
+                blobURL_received: ["", "", "", "", ""],
+              };
+            });
+            console.log(this.state);
+          }}
+        >
+          state
+        </button>
       </div>
     );
   }
