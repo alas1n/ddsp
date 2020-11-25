@@ -360,7 +360,7 @@ def soundTimberFunc(filename, selected_model):
 
   #####################################################################################################################
 
-  # TRIM = -15
+  TRIM = -15
   # # Plot Features.
   # fig, ax = plt.subplots(nrows=3, 
   #                        ncols=1, 
@@ -625,23 +625,24 @@ def soundTimberFunc(filename, selected_model):
   print('Prediction took %.1f seconds' % (time.time() - start_time))
 
   # Plot
-  print('Original')
-  playsound(audio)
+  # print('Original')
+  # playsound(audio)
 
-  print('Resynthesis')
-  playsound(audio_gen)
+  # print('Resynthesis')
+  # playsound(audio_gen)
 
   Myspecplot(audio)
   plt.title("Original")
 
   Myspecplot(audio_gen)
   _ = plt.title("Resynthesis")
+  name = "Resynthesis_" + selected_model
+  outfilename = "%s.wav" % name
 
-  wavio.write("Original.wav", audio, sample_rate, sampwidth=2)
-  wavio.write("Resynthesis.wav", audio_gen.numpy()[0], sample_rate, sampwidth=2)
+  wavio.write(outfilename, audio_gen.numpy()[0], sample_rate, sampwidth=2)
 
 
-soundTimberFunc("audio.wav","Flute")
+# soundTimberFunc("audio_16K_mono.wav","Flute")
 
 
 
